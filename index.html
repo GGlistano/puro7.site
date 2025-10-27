@@ -386,9 +386,39 @@
         .hidden {
             display: none;
         }
+
+        .countdown-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ef4444;
+            color: white;
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .countdown-timer {
+            font-size: 1.25rem;
+            margin-left: 0.5rem;
+        }
+
+        body {
+            padding-top: 3.5rem;
+        }
     </style>
 </head>
 <body>
+    <!-- Countdown Banner -->
+    <div class="countdown-banner" id="countdown-banner">
+        <span id="countdown-text">A oferta expira em</span>
+        <span class="countdown-timer" id="countdown-timer">10:00</span>
+    </div>
+
     <div class="container" id="checkout-container">
         <!-- Product Header -->
         <div class="product-header">
@@ -540,9 +570,13 @@
             'e-mola': '841234567'
         };
 
+        let timeLeft = 600;
+        let timerInterval = null;
+
         document.addEventListener('DOMContentLoaded', function() {
             initializeEventListeners();
             updateStepper();
+            startCountdown();
         });
 
         function initializeEventListeners() {
@@ -773,6 +807,35 @@
                     line.classList.add('inactive');
                 }
             }
+        }
+
+        function startCountdown() {
+            updateCountdownDisplay();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('countdown-text').textContent = 'Oferta Encerrada';
+                    document.getElementById('countdown-timer').style.display = 'none';
+
+                    const buttons = document.querySelectorAll('.btn-primary');
+                    buttons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.cursor = 'not-allowed';
+                    });
+                } else {
+                    updateCountdownDisplay();
+                }
+            }, 1000);
+        }
+
+        function updateCountdownDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('countdown-timer').textContent = display;
         }
     </script>
 </body>
