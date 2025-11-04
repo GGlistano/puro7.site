@@ -1,843 +1,1926 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Produto</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Spotify Opina | Avalie</title>
+    <link rel="icon" href="images/spotifylogo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+
     <style>
-        * {
+        body {
+            background-color: #f0f4f8;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            padding-top: 60px;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .container {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 2rem;
-            max-width: 42rem;
-            width: 100%;
-            border: 2px solid #e5e7eb;
-        }
-
-        .product-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .product-image {
-            width: 6rem;
-            height: 6rem;
-            object-fit: cover;
-            border-radius: 0.75rem;
-            border: 2px solid #1DB954;
-        }
-
-        .product-info h1 {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: black;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-price {
-            font-size: 2.25rem;
-            font-weight: bold;
-            color: #3B82F6;
-        }
-
-        .stepper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-        }
-
-        .step-wrapper {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-
-        .step-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-        }
-
-        .step-circle {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .step-circle.active {
-            background: #1DB954;
-            color: white;
-        }
-
-        .step-circle.inactive {
-            background: #e5e7eb;
-            color: #9ca3af;
-        }
-
-        .step-title {
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            font-weight: 600;
-        }
-
-        .step-title.active {
-            color: #1DB954;
-        }
-
-        .step-title.inactive {
-            color: #9ca3af;
-        }
-
-        .step-line {
-            height: 2px;
-            flex: 1;
-            margin: 0 0.5rem;
-            transition: all 0.3s;
-        }
-
-        .step-line.active {
-            background: #1DB954;
-        }
-
-        .step-line.inactive {
-            background: #e5e7eb;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: bold;
-            color: black;
-            margin-bottom: 0.5rem;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1.25rem;
-            height: 1.25rem;
-            color: #9ca3af;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            color: black;
-            transition: all 0.2s;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: #1DB954;
-        }
-
-        .form-input.error {
-            border-color: #ef4444;
-        }
-
-        .error-message {
-            color: #ef4444;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            font-weight: 600;
-        }
-
-        .payment-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .payment-option {
-            padding: 1.5rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: white;
-        }
-
-        .payment-option:hover {
-            border-color: #d1d5db;
-        }
-
-        .payment-option.selected {
-            border-color: #1DB954;
-            background: rgba(29, 185, 84, 0.05);
-        }
-
-        .payment-logo {
-            width: 100%;
-            height: 5rem;
-            object-fit: contain;
-        }
-
-        .info-box {
-            background: rgba(29, 185, 84, 0.1);
-            border: 2px solid #1DB954;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-label {
-            color: black;
-            font-size: 0.875rem;
-            font-weight: bold;
-            margin-bottom: 0.75rem;
-        }
-
-        .account-box {
-            background: white;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 2px solid #e5e7eb;
-        }
-
-        .account-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1DB954;
-        }
-
-        .copy-button {
-            padding: 0.5rem;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            border-radius: 0.5rem;
-            transition: background 0.2s;
-        }
-
-        .copy-button:hover {
-            background: #f3f4f6;
-        }
-
-        .copy-icon {
-            width: 1.25rem;
-            height: 1.25rem;
-            color: #6b7280;
-        }
-
-        .file-upload {
-            border: 2px dashed #d1d5db;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s;
-            background: #f9fafb;
-        }
-
-        .file-upload:hover {
-            border-color: #1DB954;
-        }
-
-        .upload-icon {
-            width: 2rem;
-            height: 2rem;
-            color: #9ca3af;
-            margin: 0 auto 0.5rem;
-        }
-
-        .upload-text {
-            font-size: 0.875rem;
-            color: black;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 0.75rem;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: #1DB954;
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: #1ed760;
-        }
-
-        .btn-primary:disabled {
-            background: #e5e7eb;
-            color: #9ca3af;
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background: #f3f4f6;
-            color: black;
-        }
-
-        .btn-secondary:hover {
-            background: #e5e7eb;
-        }
-
-        .chevron-icon {
-            width: 1.25rem;
-            height: 1.25rem;
-            transition: transform 0.2s;
-        }
-
-        .btn-primary:hover .chevron-icon {
-            transform: translateX(0.25rem);
-        }
-
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .success-container {
-            text-align: center;
-        }
-
-        .success-icon-wrapper {
-            width: 4rem;
-            height: 4rem;
-            background: #1DB954;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-        }
-
-        .success-icon {
-            width: 2rem;
-            height: 2rem;
-            color: white;
-        }
-
-        .success-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: black;
-            margin-bottom: 0.5rem;
-        }
-
-        .success-message {
-            color: #6b7280;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .countdown-banner {
+        /* Alerta de simulacao fixo */
+        .simulation-alert {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            background: #b91c1c;
-            color: white;
-            padding: 0.875rem;
+            width: 100%;
+            background-color: #ff9800;
+            color: #fff;
             text-align: center;
-            font-weight: 900;
-            font-size: 1.125rem;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.5);
+            padding: 15px 10px;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 10001;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .countdown-timer {
-            font-size: 1.375rem;
-            margin-left: 0.5rem;
-            font-weight: 900;
+        /* Menu de cima */
+        .menu {
+            position: fixed;
+            top: 60px;
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(180deg, #f0f4f8, #fff);
+            display: flex;
+            margin: 0 auto;
+            justify-content: space-between;
+            padding: 5px;
+            box-sizing: border-box;
+            z-index: 9998;
+            border-radius: 0px 0px 20px 20px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
         }
 
-        body {
-            padding-top: 3.5rem;
+        .menu::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #f0f4f8, #fff);
+            z-index: -1;
+            border-radius: 20px;
+        }
+
+        .menu a {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .menu a img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+
+        .buttons-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .valor-box {
+            width: 130px;
+            height: 25px;
+            background-color: #06B32E;
+            border-radius: 12px;
+            padding: 10px;
+            align-items: center;
+            line-height: 25px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .valor-box-saque {
+            width: 99%;
+            height: 100%;
+            background-color: #fff;
+            border-radius: 20px;
+            align-items: center;
+            line-height: 20px;
+            display: block;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding-top: 10px;
+            padding-bottom: 40px;
+        }
+
+        .valor-box span {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        #valor {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        #valor-saque {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 21px;
+        }
+
+        #valor-money {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 21px;
+        }
+
+        /* Menu de baixo */
+        .menuemb {
+            position: fixed;
+            bottom: 1%;
+            width: 95%;
+            left: 2.5%;
+            right: 2.5%;
+            background: linear-gradient(180deg, #fff, #fff);
+            display: flex;
+            margin: 0 auto;
+            justify-content: space-between;
+            padding: 10px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            z-index: 9995;
+        }
+
+        .menuemb a {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            height: 50px;
+        }
+
+        .menuemb a img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* BOTOES LIKE E DISLIKE */
+        .like-dislike-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0px;
+        }
+
+        .like-button, .dislike-button {
+            border: 2px solid;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            text-align: center;
+            margin: 0 auto;
+            right: 5%;
+            left: 5%;
+        }
+
+        .like-button {
+            border-color: green;
+            color: green;
+            width: 49%;
+            right: 5%;
+            left: 5%;
+            border-radius: 8px;
+        }
+
+        .dislike-button {
+            border-color: red;
+            color: red;
+            width: 49%;
+            right: 5%;
+            left: 5%;
+            border-radius: 8px;
+        }
+
+        .liked {
+            background: linear-gradient(180deg, green, green);
+            color: #fff;
+        }
+
+        .disliked {
+            background: linear-gradient(180deg, red, red);
+            color: #fff;
+        }
+
+        .button-container {
+            display: flex;
+            margin: 0 auto;
+            width: 90%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .square-button {
+            border-radius: 12px;
+            border: none;
+            aspect-ratio: 1 / 1;
+            margin: 5px;
+            background-color: #fff;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .square-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .square-button.active {
+            background-color: #06B32E;
+            transform: scale(1.1);
+        }
+
+        .input-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            margin: 0 auto;
+        }
+
+        .input-container input[type="text"] {
+            width: 100%;
+            font-size: 15px;
+            color: #303030;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            margin: 0 auto;
+        }
+
+        /* POPUP SAQUE */
+        .popup-container {
+            position: fixed;
+            border-radius: 15px;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding-bottom: 20px;
+            padding-top: 20px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 100);
+            display: none;
+            z-index: 10000;
+        }
+
+        .popup-container2 {
+            display: none;
+            margin: 0 auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #292929;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 9997;
+            opacity: 100%;
+            color: white;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 100);
+        }
+
+        .popup-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+            text-align: center;
+        }
+
+        .popup-button {
+            background-color: #FF0000;
+            width: 95%;
+            border-radius: 8px;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .desbloquear-button {
+            background-color: #06B32E;
+            width: 90%;
+            border-radius: 8px;
+            color: #fff;
+            border: none;
+            height: 40px;
+            font-size: 14px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        /* POPUP LIMITE DE SAQUE */
+        .popup-containerL {
+            position: fixed;
+            border-radius: 15px;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding-bottom: 20px;
+            padding-top: 20px;
+            box-shadow: 0 0 350px rgba(0, 0, 0, 1);
+            display: none;
+            z-index: 10000;
+        }
+
+        .popup-textL {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+            text-align: center;
+        }
+
+        .popup-buttonL {
+            background-color: #FF0000;
+            width: 95%;
+            border-radius: 8px;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .desbloquear-buttonL {
+            background: linear-gradient(135deg, #28a745, #06641c);
+            width: 95%;
+            border-radius: 8px;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Style dos icones do Google */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 30;
+        }
+
+        /* Barra de carregamento */
+        #progress-bar {
+            width: 95%;
+            height: 20px;
+            background-color: #ddd;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        #progress-bar div {
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: #ff0000;
+            animation: progress 86400s linear;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+        }
+
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* Caixa de login */
+        .loginbox {
+            width: 90%;
+            height: 250px;
+            background-color: #d9d9d9;
+            border-radius: 20px;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .input-container label {
+            display: block;
+            font-size: 17px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .input-container input[type="text"] {
+            width: 96%;
+            font-size: 15px;
+            color: #007bff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilo para a bolinha girando */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 4px solid rgba(0, 0, 0, 0.3);
+            border-top: 4px solid #28a745;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            vertical-align: middle;
+        }
+
+        .prosseguir-button {
+            background-color: #06B32E;
+            width: 90%;
+            border-radius: 12px;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            font-weight: bold;
+            margin: 0 auto;
+        }
+
+        .prosseguir-button1 {
+            background: linear-gradient(135deg, #28a745, #06641c);
+            width: 90%;
+            border-radius: 8px;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .criar-conta {
+            background-color: #fff;
+            width: 90%;
+            border-radius: 8px;
+            color: rgb(101, 101, 101);
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Notificacao de dinheiro */
+        .notificacaoDinheiro {
+            display: none;
+            margin: 0 auto;
+            position: fixed;
+            top: -100px;
+            left: 0;
+            right: 0;
+            color: #333;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+            background-image: linear-gradient(125deg, #5575FD, #2B50F0);
+            z-index: 9999;
+            height: 50px;
+            width: 60%;
+            border-radius: 20px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        .notificacaoDinheiro.activeDinheiro {
+            display: block;
+            animation: slideInDinheiro 0.5s forwards;
+        }
+
+        .notificacaoDinheiro.activeDinheiro.slideOutDinheiro {
+            animation: slideOutDinheiro 0.5s forwards;
+        }
+
+        @keyframes slideInDinheiro {
+            from { top: -100px; }
+            to { top: 0; }
+        }
+
+        @keyframes slideOutDinheiro {
+            from { top: 0; }
+            to { top: -100px; }
+        }
+
+        /* Slogan inicio */
+        .slogan-inicio {
+            display: flex;
+            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+            background-color: #7a7a7a;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            height: 70px;
+            width: 95%;
+            border-radius: 20px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .outer-box {
+            width: 90%;
+            display: flex;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .outer-box-login {
+            width: 90%;
+            display: flex;
+            margin: 0 auto;
+            border-radius: 10;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .center-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .white-box {
+            display: block;
+            margin: 0 auto;
+            background-color: #fff;
+            height: 100%;
+            width: 99%;
+            border-radius: 10px;
+            padding-top: 20px;
+            padding-bottom: 22px;
+        }
+
+        .imagem {
+            display: block;
+            margin: 0 auto;
+            background-color: #fff;
+            height: 100%;
+            width: 90%;
+            border-radius: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .white-box-login {
+            display: block;
+            margin: 0 auto;
+            background-color: #fff;
+            height: 100%;
+            width: 99%;
+            border-radius: 20px;
+            padding-top: 20px;
+            padding-bottom: 22px;
+        }
+
+        .footer-text {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            color: #ffffff;
+            padding: 10px;
+            box-sizing: border-box;
+            padding-bottom: 20px;
+        }
+
+        .wbc {
+            text-align: center;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .gerarCodigo {
+            display: flex;
+            justify-content: center;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #28a745, #28a745);
+            border: 0;
+            color: white;
+            border-radius: 8px;
+            width: 50%;
+            height: 30px;
+            line-height: 27px;
+            font-size: 16px;
+        }
+
+        .gerarCodigo2 {
+            display: flex;
+            justify-content: center;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #28a745, #28a745);
+            border: 0;
+            color: white;
+            font-weight: bold;
+            border-radius: 12px;
+            width: 85%;
+            height: 35px;
+            line-height: 30px;
+            font-size: 16px;
+        }
+
+        .centro {
+            background-color: white;
+            height: 100%;
+            width: 95%;
+            left: 2.5%;
+            display: flex;
+            margin: 0 auto;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-label, .form-input {
+            border-radius: 12px;
+            width: 90%;
+            justify-content: center;
+            display: flex;
+            margin: 0 auto;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .form-input {
+            border: 1px solid #202020;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .form-label {
+            height: 35px;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            background-color: rgb(99, 99, 99);
+            line-height: 35px;
+            margin-bottom: 15px;
+        }
+
+        #container-progresso {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            text-align: center;
+        }
+
+        #barra-progresso-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        #minha-barra-progresso {
+            stroke-linecap: round;
+            stroke-dasharray: 0 100;
+            animation: preencherAnimacao 2.5s linear forwards;
+        }
+
+        @keyframes preencherAnimacao {
+            100% { stroke-dasharray: 100 1; }
+        }
+
+        #texto-progresso {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #28a745;
+        }
+
+        #meu-valor-progresso {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .faq-container {
+            width: 90%;
+            display: block;
+            margin: 0 auto;
+            max-width: 600px;
+            border-radius: 8px;
+            color: #fff;
+        }
+
+        .faq-item {
+            margin-bottom: 16px;
+            border: 1px solid #f0f4f8;
+            border-radius: 12px;
+        }
+
+        .question {
+            padding: 16px;
+            background-color: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            color: rgb(101, 101, 101);
+            font-weight: bold;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer {
+            padding: 16px;
+            display: none;
+            background-color: #06B32E;
+            color: white;
+        }
+
+        .answer.active {
+            display: block;
+            border-radius: 8px;
+        }
+
+        .faq-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #06B32E;
+            text-align: center;
+        }
+
+        .rating-container {
+            display: flex;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .rating-button {
+            background-color: rgb(226, 226, 226);
+            border: none;
+            width: 95%;
+            height: 40px;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: rgb(101, 101, 101);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating-button.active {
+            background-color: #06B32E;
+            color: white;
+        }
+
+        .pergunta-whats {
+            font-size: 16px;
+            text-align: center;
+            font-weight: bold;
+            color: rgb(101, 101, 101);
+            padding-left: 10%;
+            padding-right: 10%;
+            margin-top: 25px;
+            margin-bottom: 5px;
+        }
+
+        .enviarCodigo {
+            background-color: #06B32E;
+            width: 93%;
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            border: none;
+            height: 40px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 0px auto;
+            box-sizing: border-box;
+            margin-top: 15px;
+        }
+
+        .card__satisfacao {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card__satisfacao h2, .card__resposta h2 {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .card__gradeContainer {
+            display: grid;
+            width: 90%;
+            grid-template-rows: 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            grid-gap: 10px;
+            margin-top: 20px;
+        }
+
+        .card__grade {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            transition: all ease 0.3s;
+        }
+
+        .card__grade i {
+            font-size: 32px;
+            color: #7e7e7e;
+        }
+
+        .card__gradeDescricao {
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin: 5px 0px 0px 0px;
+            color: #7e7e7e;
+        }
+
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .square-button {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            width: 100%;
+            border: 3px solid transparent;
+            border-radius: 16px;
+            background: #fff;
+            padding: 0;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.08s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .square-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .square-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .square-button.is-selected {
+            border-color: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
         }
     </style>
 </head>
 <body>
-    <!-- Countdown Banner -->
-    <div class="countdown-banner" id="countdown-banner">
-        <span id="countdown-text">⚠️ Esta oferta expira em</span>
-        <span class="countdown-timer" id="countdown-timer">10:00</span>
-    </div>
 
-    <div class="container" id="checkout-container">
-        <!-- Product Header -->
-        <div class="product-header">
-            <img src="/img/ptoduto.png" alt="Produto" class="product-image">
-            <div class="product-info">
-                <h1>Produto Teste</h1>
-                <div class="product-price">197 MZN</div>
-            </div>
-        </div>
+<!-- Alerta de Simulacao -->
+<div class="simulation-alert">
+    ATENCAO: Isto e apenas uma simulacao. Nao sao ganhos reais!
+</div>
 
-        <!-- Stepper -->
-        <div class="stepper">
-            <div class="step-wrapper">
-                <div class="step-container">
-                    <div class="step-circle" id="step1-circle">
-                        <svg class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <span id="step1-number">1</span>
-                    </div>
-                    <span class="step-title" id="step1-title">Informações</span>
-                </div>
-                <div class="step-line" id="line1"></div>
-            </div>
-            <div class="step-wrapper">
-                <div class="step-container">
-                    <div class="step-circle" id="step2-circle">
-                        <svg class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <span id="step2-number">2</span>
-                    </div>
-                    <span class="step-title" id="step2-title">Pagamento</span>
-                </div>
-                <div class="step-line" id="line2"></div>
-            </div>
-            <div class="step-container">
-                <div class="step-circle" id="step3-circle">
-                    <svg class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span id="step3-number">3</span>
-                </div>
-                <span class="step-title" id="step3-title">Confirmação</span>
-            </div>
-        </div>
+<!-- Audio -->
+<audio id="meuAudio"><source src="media/dinheiro.mp3" type="audio/mp3"></audio>
 
-        <!-- Step 1: Customer Info -->
-        <div id="step1-content">
-            <div class="form-group">
-                <label class="form-label">Nome Completo</label>
-                <div class="input-wrapper">
-                    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <input type="text" id="customerName" class="form-input" placeholder="Digite o seu nome">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Número de WhatsApp</label>
-                <div class="input-wrapper">
-                    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    <input type="tel" id="phoneNumber" class="form-input" placeholder="84 123 4567">
-                </div>
-            </div>
-            <button class="btn btn-primary" id="continue-step1" disabled>
-                Continuar
-                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+<!-- Pagina de login -->
+<div id="login" style="display: block;">
+    <div style="padding-top:30%;"></div>
+    <div class="outer-box-login">
+        <div class="white-box-login">
+            <img src="images/opinilogo.png" style="width:30%; margin: 0 auto; display: flex;">
+            <p class="popup-textL" style="text-align: center; color: rgb(101, 101, 101); font-weight: bold; font-size: 18px;">
+                Bem-vindo(a) ao SpotifyOpina
+            </p>
+            <p class="popup-textL" style="text-align: center; color: rgb(101, 101, 101); font-size: 15px;">
+                Insira seu e-mail para prosseguir!
+            </p>
+            <input class="form-input" id="email" name="email" placeholder="E-mail" style="margin-top:20px;" type="text">
+            <button class="prosseguir-button" id="prosseguir-button" onclick="verificarCampos()" style="margin-top: 15px;">
+                ENTRAR
             </button>
+            <div style="margin-bottom: 10px;"></div>
         </div>
+    </div>
+    <div class="footer-text">
+        <p style="text-align: center; color: rgb(101, 101, 101); font-size: 15px; margin-top: 30px; font-weight: bold;">
+            2024 Spotify LLC
+        </p>
+        <p style="text-align: center; color: rgb(101, 101, 101); font-size: 14px; margin-top: -10px; margin-bottom: 0px;">
+            Termos e Politica de Privacidade
+        </p>
+    </div>
+</div>
 
-        <!-- Step 2: Payment Method -->
-        <div id="step2-content" class="hidden">
-            <div class="form-group">
-                <label class="form-label">Selecione o Método de Pagamento</label>
-                <div class="payment-grid">
-                    <div class="payment-option" id="mpesa-option" data-method="m-pesa">
-                        <img src="/img/mpesa-logo.png" alt="M-Pesa" class="payment-logo">
-                    </div>
-                    <div class="payment-option" id="emola-option" data-method="e-mola">
-                        <img src="/img/emola-logo.png" alt="E-Mola" class="payment-logo">
-                    </div>
-                </div>
+<!-- Pagina Inicio -->
+<div id="inicio" style="display: none;">
+    <div class="menu">
+        <a style="width: 30%;"><img src="images/opinilogo.png" style="width: 110px;"></a>
+        <div class="buttons-container" onclick="mostrarPagina('saque')" style="width: 45%;">
+            <div class="valor-box">
+                <span id="valor" style="font-family: 'Montserrat', sans-serif; max-width: 100%;">1000 MT</span>
             </div>
-            <div class="button-group">
-                <button class="btn btn-secondary" id="back-step2">Voltar</button>
-                <button class="btn btn-primary" id="continue-step2" disabled>
-                    Continuar
-                    <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Step 3: Confirmation -->
-        <div id="step3-content" class="hidden">
-            <div class="info-box">
-                <p class="info-label">Transfira para este número:</p>
-                <div class="account-box">
-                    <span class="account-number" id="account-number">841234567</span>
-                    <button class="copy-button" id="copy-btn">
-                        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Cole o ID da Transferência</label>
-                <input type="text" id="transactionId" class="form-input" placeholder="PP251026.1643.Y13716">
-                <p class="error-message hidden" id="validation-error"></p>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Comprovante de Pagamento (Opcional)</label>
-                <div class="file-upload">
-                    <input type="file" id="file-input" accept="image/*" class="hidden">
-                    <label for="file-input" style="cursor: pointer; display: flex; flex-direction: column; align-items: center;">
-                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        <span class="upload-text" id="file-name">Carregar imagem</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="button-group">
-                <button class="btn btn-secondary" id="back-step3">Voltar</button>
-                <button class="btn btn-primary" id="submit-btn" disabled>
-                    <svg class="hidden spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
-                    <span id="submit-text">Submeter Pedido</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Success Message -->
-        <div id="success-content" class="hidden success-container">
-            <div class="success-icon-wrapper">
-                <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <h2 class="success-title">Pedido Submetido!</h2>
-            <p class="success-message">Obrigado <span id="success-name"></span>! Vamos verificar o seu pagamento e entraremos em contacto em breve.</p>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://gepjtcnfnrcviardxxax.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlcGp0Y25mbnJjdmlhcmR4eGF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0ODgzMjQsImV4cCI6MjA3NzA2NDMyNH0.8Lj68xc5V3HnhwmJ_SoV6yRy0x-44tQdNnO3ZJzwcYw';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <div style="margin-bottom: 100px;"></div>
 
-        let currentStep = 1;
-        let customerName = '';
-        let phoneNumber = '';
-        let paymentMethod = null;
-        let transactionId = '';
-        let proofFile = null;
+    <!-- Anuncio 1 -->
+    <div class="outer-box" id="ad1" style="display: block;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 800 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Mrbow.jpg" style="width: 50%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas de Mr. Bow?</p>
+            <div class="rating-container" id="rating-container-1">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria o cantor Mr. Bow para seus amigos e familiares?</p>
+            <div class="rating-container" id="rating-container-2">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta o cantor Mr. Bow?</p>
+            <div class="rating-container" id="rating-container-3">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B1" onclick="showLoadingB1();" type="button">Enviar respostas</button>
+        </div>
+    </div>
 
-        const PAYMENT_ACCOUNTS = {
-            'm-pesa': '851576729 (GILDO EGIDIO TAVARES )',
-            'e-mola': '868537964 (MANDELA BILALE SALIMO )'
-        };
+    <!-- Popup B1 -->
+    <div class="popup-container" id="popupB1">
+        <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            800 MT
+        </span>
+    </div>
 
-        let timeLeft = 600;
-        let timerInterval = null;
+    <!-- Anuncio 2 -->
+    <div class="outer-box" id="ad2" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 900 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/TwentyFingers.jpg" style="width: 70%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas do Twenty Fingers?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria o cantor Twenty Fingers para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta o cantor Twenty Fingers?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B2" onclick="showLoadingB2();" type="button">Enviar respostas</button>
+        </div>
+    </div>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeEventListeners();
-            updateStepper();
-            startCountdown();
+    <!-- Popup B2 -->
+    <div class="popup-container" id="popupB2">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            900 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 3 - Messias Maricoa -->
+    <div class="outer-box" id="ad3" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 700 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Messias Maricoa.jpg" style="width: 50%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas do Messias Maricoa?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria o cantor Messias Maricoa para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta o cantor Messias Maricoa?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B3" onclick="showLoadingB3();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B3 -->
+    <div class="popup-container" id="popupB3">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            700 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 4 - Lizha James -->
+    <div class="outer-box" id="ad4" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 950 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Lizha James.jpg" style="width: 80%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas de Lizha James?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria a cantora Lizha James para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta a cantora Lizha James?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B4" onclick="showLoadingB4();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B4 -->
+    <div class="popup-container" id="popupB4">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            950 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 5 - Liloca -->
+    <div class="outer-box" id="ad5" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 850 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Liloca.jpg" style="width: 80%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas de Liloca?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria a cantora Liloca para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta a cantora Liloca?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B5" onclick="showLoadingB5();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B5 -->
+    <div class="popup-container" id="popupB5">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            850 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 6 - Mc Roger -->
+    <div class="outer-box" id="ad6" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 750 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Mc Roger.jpg" style="width: 85%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas de Mc Roger?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria o cantor Mc Roger para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta o cantor Mc Roger?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B6" onclick="showLoadingB6();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B6 -->
+    <div class="popup-container" id="popupB6">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            750 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 7 - Hot Blaze -->
+    <div class="outer-box" id="ad7" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 900 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Hot Blaze.jpeg" style="width: 75%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas de Hot Blaze?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria o cantor Hot Blaze para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta o cantor Hot Blaze?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B7" onclick="showLoadingB7();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B7 -->
+    <div class="popup-container" id="popupB7">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            900 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 8 - Dama do Bling -->
+    <div class="outer-box" id="ad8" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 750 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Dama do Bling.jpg" style="width: 80%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas da Dama do Bling?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria a cantora Dama do Bling para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta a cantora Dama do Bling?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B8" onclick="showLoadingB8();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B8 -->
+    <div class="popup-container" id="popupB8">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            750 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 9 - Dygo Boy -->
+    <div class="outer-box" id="ad9" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 750 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Dygo Boy.jpg" style="width: 80%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas de Dygo Boy?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria o cantor Dygo Boy para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta o cantor Dygo Boy?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B9" onclick="showLoadingB9();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B9 -->
+    <div class="popup-container" id="popupB9">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            750 MT
+        </span>
+    </div>
+
+    <!-- Anuncio 10 - Laylizzy -->
+    <div class="outer-box" id="ad10" style="display: none;">
+        <div class="white-box">
+            <p style="font-size: 22px; text-align: center; font-weight: bold; margin-top: 0px; margin-bottom: 15px; color: #06B32E;">
+                Responda e ganhe 750 MT!
+            </p>
+            <div class="imagem">
+                <img src="images/Laylizzy.jpg" style="width: 80%; margin: 0 auto; display: flex; border-radius: 15px;">
+            </div>
+            <p class="pergunta-whats">De 1 a 5, qual nota você daria para as músicas de Laylizzy?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">1</button>
+                <button class="rating-button" data-rating="2">2</button>
+                <button class="rating-button" data-rating="3">3</button>
+                <button class="rating-button" data-rating="4">4</button>
+                <button class="rating-button" data-rating="5">5</button>
+            </div>
+            <p class="pergunta-whats">Recomendaria o cantor Laylizzy para seus amigos e familiares?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">Sim</button>
+                <button class="rating-button" data-rating="2">Não</button>
+            </div>
+            <p class="pergunta-whats">Qual faixa etária você acha que mais escuta o cantor Laylizzy?</p>
+            <div class="rating-container">
+                <button class="rating-button" data-rating="1">-18 anos</button>
+                <button class="rating-button" data-rating="2">+18 anos</button>
+            </div>
+            <button class="enviarCodigo" id="B10" onclick="showLoadingB10();" type="button">Enviar respostas</button>
+        </div>
+    </div>
+
+    <!-- Popup B10 -->
+    <div class="popup-container" id="popupB10">
+        <dotlottie-player autoplay background="transparent" loop speed="1"
+            src="https://lottie.host/dfcc0486-0a2c-42d7-b454-1922410a517d/ccVkLniJIv.json"
+            style="width: 200px; height: 200px; display: flex; margin: 0 auto; margin-top: -20px; margin-bottom: -20px;">
+        </dotlottie-player>
+        <span class="popup-text" style="font-size: 20px;">Voce recebeu:</span>
+        <span class="popup-text" style="font-size: 40px; font-weight: bold; font-family: 'Montserrat', sans-serif; margin-top: -10px; color: #06B32E;">
+            750 MT
+        </span>
+    </div>
+
+    <!-- Limite atingido -->
+    <div class="popup-containerL" id="popupL">
+        <div id="container-progresso" style="display: flex; margin: 0 auto; width: 300px; height: 300px;">
+            <svg id="barra-progresso-svg" viewBox="0 0 36 36">
+                <circle cx="18" cy="18" fill="none" r="16" stroke="#ccc" stroke-width="3"></circle>
+                <circle cx="18" cy="18" fill="none" id="minha-barra-progresso" r="16" stroke="#06B32E" stroke-dasharray="0 1000" stroke-width="3"></circle>
+            </svg>
+            <div id="texto-progresso">
+                <span id="valor-saque" style="font-family: 'Montserrat', sans-serif; font-size: 23px;">1000 MT</span>
+                <span style="font-family: 'Montserrat', sans-serif; color: #202020; font-size: 14px;">Seu saldo subiu!</span>
+            </div>
+        </div>
+        <p style="font-family: 'Montserrat', sans-serif; font-size: 32px; color: #28a745; text-align: center; margin-top: 15px; margin-bottom: -5px;">
+            Parabens!
+        </p>
+        <p class="popup-textL" style="margin-bottom: 20px; font-size: 18px; color: #636363">
+            Voce atingiu seu<br>limite diario!
+        </p>
+        <button class="desbloquear-button" onclick="mostrarPagina('saque')" style="font-weight: bold; font-size: 18px; border-radius: 12px; margin-top: 15px;">
+            SAQUE AGORA
+        </button>
+    </div>
+
+    <div style="margin-bottom: 80px;"></div>
+
+    <!-- Menu debaixo -->
+    <div class="menuemb">
+        <a href="#" onclick="mostrarPagina('saque')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: rgb(101, 101, 101);">paid</span>
+        </a>
+        <a href="#" onclick="mostrarPagina('inicio')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: #06B32E;">home</span>
+        </a>
+        <a href="#" onclick="mostrarPagina('bonus')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: rgb(101, 101, 101);">help</span>
+        </a>
+    </div>
+</div>
+
+<!-- Pagina Saque -->
+<div id="saque" style="display: none;">
+    <div class="menu">
+        <a style="width: 30%;"><img src="images/opinilogo.png" style="width: 110px;"></a>
+    </div>
+
+    <div style="margin-bottom: 100px;"></div>
+
+    <div class="outer-box">
+        <div class="valor-box-saque">
+            <p style="font-size: 16px; margin-bottom: 15px; text-align: center; color: rgb(101, 101, 101);">Seu saldo</p>
+            <span id="valor-money" style="font-size: 45px; text-align: center; font-family: 'Montserrat', sans-serif; letter-spacing: -2px; color: #06B32E;">
+                1000 MT
+            </span>
+        </div>
+    </div>
+
+    <p style="margin-bottom: 18px; margin-top: 23px; color: rgb(101, 101, 101); text-align: center; font-weight: bold;">
+        Selecione como deseja levantar
+    </p>
+
+    <div class="button-container" id="payMethods">
+        <button class="square-button" type="button">
+            <img alt="M-Pesa" src="images/mpesa250.png">
+        </button>
+        <button class="square-button" type="button">
+            <img alt="E-Mola" src="images/emola250.png">
+        </button>
+    </div>
+
+    <div style="margin-bottom: 15px;"></div>
+
+    <input class="form-input" id="chave-pix" name="chave-pix" placeholder="Digite seu numero de telefone" type="text">
+    <input class="form-input" id="quantia" name="quantia" placeholder="Digite o valor que deseja levantar" style="margin-top: 15px;" type="text">
+    <button class="desbloquear-button" onclick="showPopup()" style="font-weight: bold; font-size: 18px; border-radius: 12px; margin-top: 15px;">
+        REALIZAR LEVANTAMENTO
+    </button>
+
+    <!-- TAXA DESBLOQUEIO -->
+    <div class="popup-container" id="popup">
+        <span class="popup-text" style="font-size: 20px; font-weight: bold;">DESBLOQUEAR SEU SALDO</span>
+        <div style="margin-bottom: 20px;"></div>
+        <p class="popup-text" style="padding-left: 5%; padding-right: 5%; text-align: justify;">
+            Usamos uma taxa anti-fraudes, para evitar fraudes e abuso dos levantamentos que estavam ocorrendo dentro do sistema.<br><br>
+            Fique tranquilo, voce recebera o valor da taxa de volta junto ao valor do seu levantamento, e apenas uma etapa de validamento de que voce seria um humano e nao um robo.
+        </p>
+        <div style="margin-bottom: 20px;"></div>
+        <button class="desbloquear-button" style="font-weight: bold;" onclick="alert('Sistema em desenvolvimento')">
+            DESBLOQUEAR AGORA
+        </button>
+    </div>
+
+    <div style="margin-bottom: 40px;"></div>
+
+    <!-- Menu debaixo -->
+    <div class="menuemb">
+        <a href="#" onclick="mostrarPagina('saque')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: #06B32E;">paid</span>
+        </a>
+        <a href="#" onclick="mostrarPagina('inicio')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: rgb(101, 101, 101);">home</span>
+        </a>
+        <a href="#" onclick="mostrarPagina('bonus')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: rgb(101, 101, 101);">help</span>
+        </a>
+    </div>
+</div>
+
+<!-- Pagina Bonus (FAQ) -->
+<div id="bonus" style="display: none;">
+    <div class="menu">
+        <a style="width: 30%;"><img src="images/opinilogo.png" style="width: 110px;"></a>
+    </div>
+
+    <div style="margin-bottom: 90px;"></div>
+    <div style="margin-bottom: 110px;"></div>
+
+    <p class="faq-title">Perguntas frequentes</p>
+
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">Preciso pagar a taxa toda vez?</div>
+            <div class="answer">Não! A taxa seria paga somente a primeira vez, para confirmar que você é um humano, e não um robô. Você receberá o estorno do valor da taxa após o primeiro saque</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">Por que existe a taxa?</div>
+            <div class="answer">Serve como uma etapa anti-fraude, para evitar fraudes e abusos dos saques que estavam ocorrendo na plataforma! Mas não precisa se preocupar, você receberá o valor da taxa de volta junto ao valor do seu saque; seria apenas uma etapa de validação de que você é humano e não um robô.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">Em quanto tempo vou receber?</div>
+            <div class="answer">Você receberá seu saque dentro de 24 horas, da mesma forma que você receberá seu saque teste!</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">Quantas vezes posso sacar por dia?</div>
+            <div class="answer">Quantos você quiser, mas existe uma quantidade limitada de códigos que temos acesso por dia!</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleAnswer(this)">Como usa o aplicativo?</div>
+            <div class="answer">É muito simples de usar! Basta responder às perguntas sobre as empresas no menu principal e, por fim, clicar no botão de 'Enviar respostas'. Quando enviar, você já receberá seu dinheiro pela tarefa realizada!</div>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 150px;"></div>
+
+    <!-- Menu debaixo -->
+    <div class="menuemb">
+        <a href="#" onclick="mostrarPagina('saque')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: rgb(101, 101, 101);">paid</span>
+        </a>
+        <a href="#" onclick="mostrarPagina('inicio')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: rgb(101, 101, 101);">home</span>
+        </a>
+        <a href="#" onclick="mostrarPagina('bonus')">
+            <span class="material-symbols-outlined" style="text-align: center; width: 120%; margin: 15px; font-size: 40px; color: #06B32E;">help</span>
+        </a>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    const inicioDiv = document.getElementById('inicio');
+    const saqueDiv = document.getElementById('saque');
+    const loginDiv = document.getElementById('login');
+    const bonusDiv = document.getElementById('bonus');
+
+    function playAudio() {
+        var audio = document.getElementById("meuAudio");
+        audio.play();
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        const expires = `expires=${d.toUTCString()}`;
+        document.cookie = `${cname}=${cvalue}; ${expires}; path=/`;
+    }
+
+    function getCookie(cname) {
+        const name = `${cname}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    }
+
+    let valor = parseFloat(getCookie('valor')) || 1000.00;
+    const valorSpan = document.getElementById('valor');
+    const valorSpanSaque = document.getElementById('valor-saque');
+    const valorSpanMoney = document.getElementById('valor-money');
+
+    function atualizarValor() {
+        valorSpan.textContent = `${valor.toFixed(2)} MT`;
+        valorSpanSaque.textContent = `${valor.toFixed(2)} MT`;
+        valorSpanMoney.textContent = `${valor.toFixed(2)} MT`;
+        setCookie('valor', valor.toFixed(2), 365);
+    }
+
+    atualizarValor();
+
+    const valoresDesejados = [800, 900, 700, 950, 850, 750, 900, 750, 750, 750];
+
+    function aumentarValor() {
+        if (valoresDesejados.length > 0) {
+            const valorIncremento = valoresDesejados.shift();
+            valor += valorIncremento;
+            atualizarValor();
+            verificarValor();
+        }
+    }
+
+    function mostrarPagina(pagina) {
+        inicioDiv.style.display = pagina === 'inicio' ? 'block' : 'none';
+        saqueDiv.style.display = pagina === 'saque' ? 'block' : 'none';
+        loginDiv.style.display = pagina === 'login' ? 'block' : 'none';
+        bonusDiv.style.display = pagina === 'bonus' ? 'block' : 'none';
+    }
+
+    function trocarDiv(esconderId, mostrarId) {
+        document.getElementById(esconderId).style.display = 'none';
+        document.getElementById(mostrarId).style.display = 'block';
+    }
+
+    atualizarValor();
+
+    function showPopupB1() {
+        document.getElementById('B1').disabled = true;
+        document.getElementById('popupB1').style.display = 'block';
+    }
+
+    function closePopupB1() {
+        document.getElementById('popupB1').style.display = 'none';
+        document.getElementById('B1').disabled = true;
+    }
+
+    function showLoadingB1() {
+        showPopupB1();
+        playAudio();
+        setTimeout(function () {
+            closePopupB1();
+            aumentarValor();
+            trocarDiv('ad1', 'ad2');
+        }, 4000);
+    }
+
+    function showPopupB2() {
+        document.getElementById('popupB2').style.display = 'block';
+        document.getElementById('B2').disabled = true;
+    }
+
+    function closePopupB2() {
+        document.getElementById('popupB2').style.display = 'none';
+        document.getElementById('B2').disabled = true;
+    }
+
+    function showLoadingB2() {
+        showPopupB2();
+        playAudio();
+        setTimeout(function () {
+            closePopupB2();
+            aumentarValor();
+            trocarDiv('ad2', 'ad3');
+        }, 4000);
+    }
+
+    function showPopupB3() {
+        document.getElementById('popupB3').style.display = 'block';
+        document.getElementById('B3').disabled = true;
+    }
+
+    function closePopupB3() {
+        document.getElementById('popupB3').style.display = 'none';
+        document.getElementById('B3').disabled = true;
+    }
+
+    function showLoadingB3() {
+        showPopupB3();
+        playAudio();
+        setTimeout(function () {
+            closePopupB3();
+            aumentarValor();
+            trocarDiv('ad3', 'ad4');
+        }, 4000);
+    }
+
+    function showPopupB4() {
+        document.getElementById('popupB4').style.display = 'block';
+        document.getElementById('B4').disabled = true;
+    }
+
+    function closePopupB4() {
+        document.getElementById('popupB4').style.display = 'none';
+        document.getElementById('B4').disabled = true;
+    }
+
+    function showLoadingB4() {
+        showPopupB4();
+        playAudio();
+        setTimeout(function () {
+            closePopupB4();
+            aumentarValor();
+            trocarDiv('ad4', 'ad5');
+        }, 4000);
+    }
+
+    function showPopupB5() {
+        document.getElementById('popupB5').style.display = 'block';
+        document.getElementById('B5').disabled = true;
+    }
+
+    function closePopupB5() {
+        document.getElementById('popupB5').style.display = 'none';
+        document.getElementById('B5').disabled = true;
+    }
+
+    function showLoadingB5() {
+        showPopupB5();
+        playAudio();
+        setTimeout(function () {
+            closePopupB5();
+            aumentarValor();
+            trocarDiv('ad5', 'ad6');
+        }, 4000);
+    }
+
+    function showPopupB6() {
+        document.getElementById('popupB6').style.display = 'block';
+        document.getElementById('B6').disabled = true;
+    }
+
+    function closePopupB6() {
+        document.getElementById('popupB6').style.display = 'none';
+        document.getElementById('B6').disabled = true;
+    }
+
+    function showLoadingB6() {
+        showPopupB6();
+        playAudio();
+        setTimeout(function () {
+            closePopupB6();
+            aumentarValor();
+            trocarDiv('ad6', 'ad7');
+        }, 4000);
+    }
+
+    function showPopupB7() {
+        document.getElementById('popupB7').style.display = 'block';
+        document.getElementById('B7').disabled = true;
+    }
+
+    function closePopupB7() {
+        document.getElementById('popupB7').style.display = 'none';
+        document.getElementById('B7').disabled = true;
+    }
+
+    function showLoadingB7() {
+        showPopupB7();
+        playAudio();
+        setTimeout(function () {
+            closePopupB7();
+            aumentarValor();
+            trocarDiv('ad7', 'ad8');
+        }, 4000);
+    }
+
+    function showPopupB8() {
+        document.getElementById('popupB8').style.display = 'block';
+        document.getElementById('B8').disabled = true;
+    }
+
+    function closePopupB8() {
+        document.getElementById('popupB8').style.display = 'none';
+        document.getElementById('B8').disabled = true;
+    }
+
+    function showLoadingB8() {
+        showPopupB8();
+        playAudio();
+        setTimeout(function () {
+            closePopupB8();
+            aumentarValor();
+            trocarDiv('ad8', 'ad9');
+        }, 4000);
+    }
+
+    function showLoadingB9() {
+        document.getElementById('popupB9').style.display = 'block';
+        playAudio();
+        setTimeout(function () {
+            document.getElementById('popupB9').style.display = 'none';
+            aumentarValor();
+            trocarDiv('ad9', 'ad10');
+        }, 4000);
+    }
+
+    function showLoadingB10() {
+        document.getElementById('popupB10').style.display = 'block';
+        playAudio();
+        setTimeout(function () {
+            document.getElementById('popupB10').style.display = 'none';
+            aumentarValor();
+        }, 4000);
+    }
+
+    let activeButton = null;
+
+    function toggleButton(buttonNumber) {
+        const buttons = document.querySelectorAll('.square-button');
+        if (activeButton !== null) {
+            buttons[activeButton - 1].classList.remove('active');
+        }
+        if (activeButton === buttonNumber) {
+            activeButton = null;
+        } else {
+            buttons[buttonNumber - 1].classList.add('active');
+            activeButton = buttonNumber;
+        }
+    }
+
+    function showPopup() {
+        document.getElementById('popup').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function showPopupL() {
+        document.getElementById('popupL').style.display = 'block';
+    }
+
+    function closePopupL() {
+        document.getElementById('popupL').style.display = 'none';
+    }
+
+    let popupMostrado = false;
+
+    function verificarValor() {
+        if (!popupMostrado && valor >= 9100) {
+            showPopupL();
+            popupMostrado = true;
+        }
+    }
+
+    function showLoading() {
+        var button = document.getElementById("prosseguir-button");
+        button.disabled = true;
+        button.innerHTML = '<span class="loading-spinner"></span> Carregando...';
+        setTimeout(function() {
+            mostrarPagina('inicio');
+        }, 2000);
+    }
+
+    function verificarCampos() {
+        var email = document.getElementById("email").value;
+        var emailValido = /\S+@\S+\.\S+/;
+        if (email === "") {
+            alert("Insira seu e-mail para logar!");
+        } else if (!emailValido.test(email)) {
+            alert("Insira um e-mail válido!");
+        } else {
+            showLoading();
+        }
+    }
+
+    function toggleAnswer(question) {
+        const answer = question.nextElementSibling;
+        answer.classList.toggle("active");
+        const allQuestions = document.querySelectorAll(".question");
+        allQuestions.forEach((otherQuestion) => {
+            if (otherQuestion !== question) {
+                otherQuestion.nextElementSibling.classList.remove("active");
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const containers = document.querySelectorAll('.rating-container');
+        containers.forEach(function (container) {
+            const buttons = container.querySelectorAll('.rating-button');
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    buttons.forEach(function (btn) {
+                        btn.classList.remove('active');
+                    });
+                    button.classList.add('active');
+                });
+            });
         });
 
-        function initializeEventListeners() {
-            document.getElementById('customerName').addEventListener('input', validateStep1);
-            document.getElementById('phoneNumber').addEventListener('input', validateStep1);
-            document.getElementById('continue-step1').addEventListener('click', goToStep2);
+        const payButtons = document.querySelectorAll('#payMethods .square-button');
+        payButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                payButtons.forEach(b => b.classList.remove('is-selected'));
+                btn.classList.add('is-selected');
+            });
+        });
+    });
+</script>
 
-            document.getElementById('mpesa-option').addEventListener('click', () => selectPaymentMethod('m-pesa'));
-            document.getElementById('emola-option').addEventListener('click', () => selectPaymentMethod('e-mola'));
-            document.getElementById('back-step2').addEventListener('click', goToStep1);
-            document.getElementById('continue-step2').addEventListener('click', goToStep3);
-
-            document.getElementById('transactionId').addEventListener('input', handleTransactionIdChange);
-            document.getElementById('file-input').addEventListener('change', handleFileChange);
-            document.getElementById('copy-btn').addEventListener('click', copyAccountNumber);
-            document.getElementById('back-step3').addEventListener('click', goToStep2);
-            document.getElementById('submit-btn').addEventListener('click', handleSubmit);
-        }
-
-        function validateStep1() {
-            customerName = document.getElementById('customerName').value.trim();
-            phoneNumber = document.getElementById('phoneNumber').value.trim();
-            document.getElementById('continue-step1').disabled = !(customerName && phoneNumber);
-        }
-
-        function selectPaymentMethod(method) {
-            paymentMethod = method;
-            document.getElementById('mpesa-option').classList.remove('selected');
-            document.getElementById('emola-option').classList.remove('selected');
-
-            if (method === 'm-pesa') {
-                document.getElementById('mpesa-option').classList.add('selected');
-            } else {
-                document.getElementById('emola-option').classList.add('selected');
-            }
-
-            document.getElementById('continue-step2').disabled = false;
-        }
-
-        function handleTransactionIdChange(e) {
-            transactionId = e.target.value.trim();
-            const input = document.getElementById('transactionId');
-            const errorDiv = document.getElementById('validation-error');
-
-            input.classList.remove('error');
-            errorDiv.classList.add('hidden');
-
-            document.getElementById('submit-btn').disabled = transactionId.length === 0;
-        }
-
-        function validateTransactionId(id) {
-            if (!id) return false;
-            const upperCaseId = id.toUpperCase();
-
-            if (paymentMethod === 'e-mola') {
-                return /^PP\d{6}\.\d{4}\.[A-Z]\d{5}$/i.test(upperCaseId);
-            }
-
-            if (paymentMethod === 'm-pesa') {
-                return /^C[A-Z0-9]{11}$/i.test(upperCaseId);
-            }
-
-            return false;
-        }
-
-        function handleFileChange(e) {
-            if (e.target.files && e.target.files[0]) {
-                proofFile = e.target.files[0];
-                document.getElementById('file-name').textContent = proofFile.name;
-            }
-        }
-
-        function copyAccountNumber() {
-            const accountNumber = PAYMENT_ACCOUNTS[paymentMethod];
-            navigator.clipboard.writeText(accountNumber);
-
-            const btn = document.getElementById('copy-btn');
-            btn.innerHTML = '<svg class="copy-icon" style="color: #1DB954;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-
-            setTimeout(() => {
-                btn.innerHTML = '<svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
-            }, 2000);
-        }
-
-        async function handleSubmit() {
-            if (!validateTransactionId(transactionId)) {
-                const errorDiv = document.getElementById('validation-error');
-                const input = document.getElementById('transactionId');
-
-                errorDiv.textContent = paymentMethod === 'e-mola'
-                    ? 'ID inválido. Formato esperado: PP251026.1643.Y13716'
-                    : 'ID inválido. Formato esperado: CJN8HSXYPFG';
-
-                input.classList.add('error');
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const spinner = submitBtn.querySelector('.spinner');
-
-            submitBtn.disabled = true;
-            submitText.textContent = 'A processar...';
-            spinner.classList.remove('hidden');
-
-            try {
-                let proofImageUrl = null;
-
-                if (proofFile) {
-                    const fileExt = proofFile.name.split('.').pop();
-                    const fileName = `${Math.random()}.${fileExt}`;
-                    const filePath = `proof-images/${fileName}`;
-
-                    const { error: uploadError } = await supabase.storage
-                        .from('checkout-proofs')
-                        .upload(filePath, proofFile);
-
-                    if (!uploadError) {
-                        const { data } = supabase.storage
-                            .from('checkout-proofs')
-                            .getPublicUrl(filePath);
-                        proofImageUrl = data.publicUrl;
-                    }
-                }
-
-                const { error } = await supabase
-                    .from('checkout_orders')
-                    .insert({
-                        customer_name: customerName,
-                        phone_number: phoneNumber,
-                        payment_method: paymentMethod,
-                        transaction_id: transactionId.toUpperCase(),
-                        proof_image_url: proofImageUrl,
-                    });
-
-                if (error) throw error;
-
-                showSuccess();
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Erro ao submeter pedido. Tente novamente.');
-                submitBtn.disabled = false;
-                submitText.textContent = 'Submeter Pedido';
-                spinner.classList.add('hidden');
-            }
-        }
-
-        function goToStep1() {
-            currentStep = 1;
-            updateStepper();
-            document.getElementById('step1-content').classList.remove('hidden');
-            document.getElementById('step2-content').classList.add('hidden');
-            document.getElementById('step3-content').classList.add('hidden');
-        }
-
-        function goToStep2() {
-            currentStep = 2;
-            updateStepper();
-            document.getElementById('step1-content').classList.add('hidden');
-            document.getElementById('step2-content').classList.remove('hidden');
-            document.getElementById('step3-content').classList.add('hidden');
-        }
-
-        function goToStep3() {
-            currentStep = 3;
-            updateStepper();
-
-            const accountNumber = PAYMENT_ACCOUNTS[paymentMethod];
-            document.getElementById('account-number').textContent = accountNumber;
-
-            const placeholder = paymentMethod === 'e-mola' ? 'PP251026.1643.Y13716' : 'CJN8HSXYPFG';
-            document.getElementById('transactionId').placeholder = placeholder;
-
-            document.getElementById('step1-content').classList.add('hidden');
-            document.getElementById('step2-content').classList.add('hidden');
-            document.getElementById('step3-content').classList.remove('hidden');
-        }
-
-        function showSuccess() {
-            document.getElementById('success-name').textContent = customerName;
-            document.getElementById('checkout-container').children[0].classList.add('hidden');
-            document.getElementById('checkout-container').children[1].classList.add('hidden');
-            document.getElementById('step1-content').classList.add('hidden');
-            document.getElementById('step2-content').classList.add('hidden');
-            document.getElementById('step3-content').classList.add('hidden');
-            document.getElementById('success-content').classList.remove('hidden');
-        }
-
-        function updateStepper() {
-            for (let i = 1; i <= 3; i++) {
-                const circle = document.getElementById(`step${i}-circle`);
-                const title = document.getElementById(`step${i}-title`);
-                const number = document.getElementById(`step${i}-number`);
-                const checkmark = circle.querySelector('svg');
-
-                if (i < currentStep) {
-                    circle.classList.remove('inactive');
-                    circle.classList.add('active');
-                    title.classList.remove('inactive');
-                    title.classList.add('active');
-                    number.classList.add('hidden');
-                    if (checkmark) checkmark.classList.remove('hidden');
-                } else if (i === currentStep) {
-                    circle.classList.remove('inactive');
-                    circle.classList.add('active');
-                    title.classList.remove('inactive');
-                    title.classList.add('active');
-                    number.classList.remove('hidden');
-                    if (checkmark) checkmark.classList.add('hidden');
-                } else {
-                    circle.classList.remove('active');
-                    circle.classList.add('inactive');
-                    title.classList.remove('active');
-                    title.classList.add('inactive');
-                    number.classList.remove('hidden');
-                    if (checkmark) checkmark.classList.add('hidden');
-                }
-            }
-
-            for (let i = 1; i <= 2; i++) {
-                const line = document.getElementById(`line${i}`);
-                if (i < currentStep) {
-                    line.classList.remove('inactive');
-                    line.classList.add('active');
-                } else {
-                    line.classList.remove('active');
-                    line.classList.add('inactive');
-                }
-            }
-        }
-
-        function startCountdown() {
-            updateCountdownDisplay();
-
-            timerInterval = setInterval(() => {
-                timeLeft--;
-
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById('countdown-text').textContent = '⚠️ Oferta Encerrada';
-                    document.getElementById('countdown-timer').style.display = 'none';
-
-                    const buttons = document.querySelectorAll('.btn-primary');
-                    buttons.forEach(btn => {
-                        btn.disabled = true;
-                        btn.style.cursor = 'not-allowed';
-                    });
-                } else {
-                    updateCountdownDisplay();
-                }
-            }, 1000);
-        }
-
-        function updateCountdownDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            document.getElementById('countdown-timer').textContent = display;
-        }
-    </script>
 </body>
 </html>
