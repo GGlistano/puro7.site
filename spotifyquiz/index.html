@@ -433,15 +433,19 @@ Fique tranquilo, voce recebera o valor da taxa de volta junto ao valor do seu le
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     
-    // Abre a página de vendas com o token
-    if (token) {
-      window.open(`https://puro7.site/spotifyvsl/?token=${token}`, '_blank');
-    } else {
-      // Fallback se não tiver token (não deveria acontecer)
-      window.open('https://puro7.site/', '_blank');
-    }
+    // DEBUG: mostra no console
+    console.log('🔍 URL atual:', window.location.href);
+    console.log('🎫 Token encontrado:', token);
+    
+    // Monta a URL de destino
+    const urlDestino = `https://puro7.site/spotifyvsl/?token=${token}`;
+    console.log('🚀 Indo para:', urlDestino);
+    
+    // Abre a página
+    window.open(urlDestino, '_blank');
   }
 </script>
+
 
 
 <div style="margin-bottom: 20px;"></div>
